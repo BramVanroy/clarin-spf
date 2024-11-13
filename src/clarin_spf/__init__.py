@@ -4,7 +4,9 @@ from typing import Literal
 from playwright.sync_api import sync_playwright
 
 
-def clarin_login(service_url: str, browser_type: Literal["chromium", "firefox", "webkit"] = "webkit") -> dict[str, str]:
+def clarin_login(
+    service_url: str, browser_type: Literal["chromium", "firefox", "webkit"] = "webkit"
+) -> dict[str, str]:
     with sync_playwright() as p:
         browser = getattr(p, browser_type).launch(headless=False)
         context = browser.new_context()

@@ -1,5 +1,6 @@
-from clarin_spf import clarin_login
 import requests
+
+from clarin_spf import clarin_login
 
 
 def main():
@@ -8,5 +9,5 @@ def main():
     print(response.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
