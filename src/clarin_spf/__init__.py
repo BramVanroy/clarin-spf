@@ -41,10 +41,7 @@ def clarin_login(
             # We "go to" the service, which should trigger a redirect to the CLARIN discovery login flow
             page.goto(service_url, timeout=timeout_ms)
             # So we wait until the user is logged in and we finally get rerouted back to the service URL
-            if exact_url_landing:
-                landing_url = service_url
-            else:
-                landing_url = f"{service_url}*"
+            landing_url = service_url if exact_url_landing else f"{service_url}*"
             page.wait_for_url(landing_url, timeout=timeout_ms)
         except Exception as exc:
             raise LoginError(f"Login failed: {exc}")
