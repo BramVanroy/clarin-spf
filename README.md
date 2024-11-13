@@ -32,10 +32,10 @@ import requests
 # It does not have to be related to the final API you want to call
 interface_url = "https://url.to.an.interface.com"
 # The API URL is the URL of the API you want to call
-api_url = "https://ws.clarin-pl.eu/clarin-pl-ws-user-frontend"
+api_url = "https://url.to.your.com/api/endpoint"
 
 cookies = clarin_login(interface_url)
-user_resp = requests.get(api_url, cookies=cookies).json()
+response = requests.get(api_url, cookies=cookies).json()
 ```
 
 See example usages in [examples/](examples/).
