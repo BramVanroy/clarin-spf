@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools >= 64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clarin_spf"
+dynamic = ["version"]
+description = "A Python package to interact with the CLARIN SPF API to retrieve the 'logged in' cookies necessary to potentially interact with APIs of services that require the authentication."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+authors = [
+    { name = "Bram Vanroy", email = "bramvanroy@hotmail.com" },
+]
+maintainers = [
+    { name = "Bram Vanroy", email = "bramvanroy@hotmail.com" },
+]
+
+keywords = ["CLARIN", "authentication", "spf"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "playwright>=1.48.0,<2.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff"
+]
+
+[project.urls]
+homepage = "https://github.com/BramVanroy/clarin_spf"
+documentation = "https://github.com/BramVanroy/clarin_spf"
+issues = "https://github.com/BramVanroy/clarin_spf/issues"
+repository = "https://github.com/BramVanroy/clarin_spf.git"
+
+# TOOLS
+[tool.setuptools]
+include-package-data = true
+license-files = ['LICEN[CS]E*']
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/clarin_spf/version.py"
+
+[tool.ruff]
+line-length = 119
+
+[tool.ruff.lint]
+# Never enforce `E501` (line length violations).
+ignore = ["C901", "E501", "E741", "F402", "F823" ]
+select = ["C", "E", "F", "I", "W"]
+
+# Ignore import violations in all `__init__.py` files.
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "F401", "F403", "F811"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+known-first-party = ["clarin_spf"]
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
