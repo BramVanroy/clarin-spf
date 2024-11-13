@@ -31,9 +31,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+examples = [
+    "requests"
+]
 dev = [
+    "clarin_spf[examples]",
     "ruff"
 ]
+
 
 [project.urls]
 homepage = "https://github.com/BramVanroy/clarin_spf"
