@@ -5,9 +5,9 @@ from clarin_spf import ClarinCredentials
 
 def main():
     """Retrieve the user and corpora information from the Galahad portal."""
-    cookies = ClarinCredentials().cookies
-
     base_url = "https://portal.clarin.ivdnt.org/galahad"
+
+    cookies = ClarinCredentials(service_url=base_url).cookies
     user_resp = requests.get(f"{base_url}/api/user", cookies=cookies).json()
     corpora_resp = requests.get(f"{base_url}/api/corpora", cookies=cookies).json()
 

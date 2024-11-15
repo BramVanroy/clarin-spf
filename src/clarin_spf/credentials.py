@@ -5,9 +5,8 @@ from os import PathLike
 from pathlib import Path
 from typing import Literal
 
-from . import clarin_login
+from .utils import clarin_login, IsRemoteError
 from .constants import CLARIN_HOME
-from .utils import IsRemoteError
 
 
 @dataclass
@@ -17,17 +16,24 @@ class ClarinCredentials:
 
     cookies: dict = field(default_factory=dict)
     attempt_auto_init: bool = True
-    service_url: str = "https://portal.clarin.ivdnt.org/galahad"
+    overwrite: bool = False
+    service_url: str | None = None
     exact_url_landing: bool = False
     browser_type: Literal["chromium", "firefox", "webkit"] = "chromium"
     on_empty: Literal["raise", "ignore"] = "raise"
     timeout_ms: int = 300_000
 
     def __post_init__(self):
+        if not self.cookies and self.attempt_auto_init and not self.service_url:
+            raise ValueError(
+                "The 'service_url' (most often the URL to an interface that will trigger a CLARIN SFP login screen)"
+                " argument must be provided if 'cookies' are not provided and 'attempt_auto_init' is enabled."
+            )
+
         if self.attempt_auto_init and not self.cookies:
             # Try getting the cookies from the default path
             pf_cookies = Path(CLARIN_HOME) / "cookies.json"
-            if pf_cookies.exists():
+            if pf_cookies.exists() and not self.overwrite:
                 self.cookies = json.loads(pf_cookies.read_text(encoding="utf-8"))
             else:
                 try:
@@ -58,6 +64,6 @@ class ClarinCredentials:
 
     def save(self, json_path: str | PathLike | None = None):
         pf_json = Path(json_path) if json_path else Path(CLARIN_HOME) / "cookies.json"
-        pf_json.mkdir(exist_ok=True, parents=True)
+        pf_json.parent.mkdir(exist_ok=True, parents=True)
         pf_json.write_text(json.dumps(self.cookies, indent=4, ensure_ascii=False), encoding="utf-8")
         logging.info(f"Saved cookies to {str(pf_json)}.")

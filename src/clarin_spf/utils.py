@@ -1,6 +1,6 @@
 from typing import Literal
 
-from playwright._impl._errors import TargetClosedError
+from playwright._impl._errors import TargetClosedError, TimeoutError
 from playwright.sync_api import Browser, sync_playwright
 
 
@@ -55,8 +55,10 @@ def clarin_login(
             # So we wait until the user is logged in and we finally get rerouted back to the service URL
             landing_url = service_url if exact_url_landing else f"{service_url}*"
             page.wait_for_url(landing_url, timeout=timeout_ms)
+        except TimeoutError as exc:
+            raise LoginError(f"Login failed due to timeout. The login flow took longer than {timeout_ms} ms.") from exc
         except Exception as exc:
-            raise LoginError(f"Login failed: {exc}")
+            raise LoginError(f"Login failed due to an unexpected error. See above.") from exc
 
         cookies = {cookie["name"]: cookie["value"] for cookie in context.cookies()}
         browser.close()
