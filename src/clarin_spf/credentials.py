@@ -5,8 +5,8 @@ from os import PathLike
 from pathlib import Path
 from typing import Literal
 
-from .utils import clarin_login, IsRemoteError
 from .constants import CLARIN_HOME
+from .utils import IsRemoteError, clarin_login
 
 
 @dataclass
@@ -29,6 +29,9 @@ class ClarinCredentials:
                 "The 'service_url' (most often the URL to an interface that will trigger a CLARIN SFP login screen)"
                 " argument must be provided if 'cookies' are not provided and 'attempt_auto_init' is enabled."
             )
+
+        if not self.cookies and not self.attempt_auto_init:
+            raise ValueError("The 'cookies' argument must be provided if 'attempt_auto_init' is disabled.")
 
         if self.attempt_auto_init and not self.cookies:
             # Try getting the cookies from the default path

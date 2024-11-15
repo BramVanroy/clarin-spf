@@ -7,7 +7,8 @@ def main():
     """Retrieve the user and corpora information from the Galahad portal."""
     base_url = "https://portal.clarin.ivdnt.org/galahad"
 
-    cookies = ClarinCredentials(service_url=base_url).cookies
+    cookies = ClarinCredentials(service_url=base_url, overwrite=True).cookies
+    print(cookies)
     user_resp = requests.get(f"{base_url}/api/user", cookies=cookies).json()
     corpora_resp = requests.get(f"{base_url}/api/corpora", cookies=cookies).json()
 

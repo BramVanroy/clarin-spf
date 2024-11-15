@@ -36,7 +36,8 @@ examples = [
 ]
 dev = [
     "clarin_spf[examples]",
-    "ruff"
+    "ruff",
+    "pytest",
 ]
 
 

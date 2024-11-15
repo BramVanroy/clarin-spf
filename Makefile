@@ -5,4 +5,6 @@ quality:
 style:
 	ruff check src/clarin_spf examples/ --fix
 	ruff format src/clarin_spf examples/
-	
+
+test:
+	pytest tests/

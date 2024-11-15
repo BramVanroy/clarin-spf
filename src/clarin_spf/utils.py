@@ -3,13 +3,7 @@ from typing import Literal
 from playwright._impl._errors import TargetClosedError, TimeoutError
 from playwright.sync_api import Browser, sync_playwright
 
-
-class LoginError(ConnectionError):
-    """Exception raised when login fails."""
-
-
-class IsRemoteError(ConnectionError):
-    """Exception raised when the user is working remotely on a headless server."""
+from clarin_spf.errors import IsRemoteError, LoginError
 
 
 def clarin_login(
@@ -58,7 +52,7 @@ def clarin_login(
         except TimeoutError as exc:
             raise LoginError(f"Login failed due to timeout. The login flow took longer than {timeout_ms} ms.") from exc
         except Exception as exc:
-            raise LoginError(f"Login failed due to an unexpected error. See above.") from exc
+            raise LoginError("Login failed due to an unexpected error. See above.") from exc
 
         cookies = {cookie["name"]: cookie["value"] for cookie in context.cookies()}
         browser.close()
