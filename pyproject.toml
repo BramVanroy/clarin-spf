@@ -35,9 +35,11 @@ examples = [
     "requests"
 ]
 dev = [
+    "build",
     "clarin_spf[examples]",
-    "ruff",
     "pytest",
+    "ruff",
+    "twine",
 ]
 
 
