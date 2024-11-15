@@ -1,12 +1,13 @@
 import requests
 
-from clarin_spf import clarin_login
+from clarin_spf import ClarinCredentials
 
 
 def main():
     """Retrieve the user and corpora information from the Galahad portal."""
+    cookies = ClarinCredentials().cookies
+
     base_url = "https://portal.clarin.ivdnt.org/galahad"
-    cookies = clarin_login(base_url)
     user_resp = requests.get(f"{base_url}/api/user", cookies=cookies).json()
     corpora_resp = requests.get(f"{base_url}/api/corpora", cookies=cookies).json()
 
