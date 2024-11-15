@@ -19,24 +19,33 @@ git clone https://github.com/BramVanroy/clarin-spf
 cd clarin-spf
 pip install -e .[dev]
 
-playwright install
+playwright install chromium --with-deps
 ```
 
 ## Usage
 
 ```python
-from clarin_spf import clarin_login
+from clarin_spf import ClarinCredentials
 import requests
 
-# The interface URL is the URL of a service that will trigger the SPF login screen
-# It does not have to be related to the final API you want to call
-interface_url = "https://url.to.an.interface.com"
-# The API URL is the URL of the API you want to call
-api_url = "https://url.to.your.com/api/endpoint"
+base_url = "https://portal.clarin.ivdnt.org/galahad"
 
-cookies = clarin_login(interface_url)
-response = requests.get(api_url, cookies=cookies).json()
+# Will trigger a browser pop-up to login and will store cookies (by default in ~/.cache/clarin/cookies.json)
+cookies = ClarinCredentials(service_url=base_url, overwrite=True).cookies
+
+# Get API response
+user_resp = requests.get(f"{base_url}/api/user", cookies=cookies).json()
+print(user_resp)
 ```
 
 See example usages in [examples/](examples/).
 
+
+## To do
+
+- [ ] Investigate feasibility of using a headless browser
+- [ ] Investigate feasibility of running in notebooks
+- [ ] Investigate feasibility of running in CI/CD
+- [ ] Improve handling of cookies: when they expire, the `requests.get` call will fail and just return HTML for
+the CLARIN discovery login. Incorporate common operations such as `get`, `post`, `put`, `delete` in the
+`ClarinCredentials` class, and when a json parse occurs, trigger a re-login request?
