@@ -25,7 +25,7 @@ playwright install chromium --with-deps
 
 ## Usage
 
-Once you have logged in by initializing the `ClarinRequester` class, you can use the `get`, `post`, `put`, and `delete` methods to make requests to the CLARIN services. The cookies will be automatically added to the request headers. The request methods are identical to the `requests` package.
+Once you have logged in by initializing the `ClarinRequester` class, you can use the `get`, `post`, `put`, and `delete` methods to make requests to the CLARIN services. Depending on how long the cookies are valid **you will not have to login again for quite some time**, improving usability greatly. The cookies will be automatically added to the request headers for all future requests. When at some point that does not work anymore, you will be redirected to login again. The request methods are identical to the `requests` package.
 
 ```python
 from clarin_spf import ClarinRequester
