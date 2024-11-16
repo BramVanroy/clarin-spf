@@ -1,1 +1,1 @@
-from .credentials import ClarinCredentials
+from .requester import ClarinRequester

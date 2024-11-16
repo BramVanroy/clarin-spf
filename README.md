@@ -2,6 +2,8 @@
 
 Utility package to login to CLARIN's SPF and then collect the required session cookies for the login. These cookies can then be used to call the APIs of services that require authorization. Note that the pop-up login occurs in an isolated browser environment so no personal information or cookies are ever collected or used or even read.
 
+The cookies are stored in locally in a file (by default in `~/.cache/clarin/cookies.json`) and can be re-used for future requests. If they expire, the login window will automatically pop up again.
+
 
 ## Installation
 
@@ -9,7 +11,7 @@ You can install the package from PyPI but you will also have to install the nece
 
 ```shell
 pip install clarin-spf
-playwright install
+playwright install chromium --with-deps
 ```
 
 For development:
@@ -18,24 +20,21 @@ For development:
 git clone https://github.com/BramVanroy/clarin-spf
 cd clarin-spf
 pip install -e .[dev]
-
 playwright install chromium --with-deps
 ```
 
 ## Usage
 
+Once you have logged in by initializing the `ClarinRequester` class, you can use the `get`, `post`, `put`, and `delete` methods to make requests to the CLARIN services. The cookies will be automatically added to the request headers. The request methods are identical to the `requests` package.
+
 ```python
-from clarin_spf import ClarinCredentials
-import requests
+from clarin_spf import ClarinRequester
 
 base_url = "https://portal.clarin.ivdnt.org/galahad"
+clarin = ClarinRequester(trigger_url=base_url)
+response = clarin.get(f"{base_url}/api/user").json()
 
-# Will trigger a browser pop-up to login and will store cookies (by default in ~/.cache/clarin/cookies.json)
-cookies = ClarinCredentials(service_url=base_url, overwrite=True).cookies
-
-# Get API response
-user_resp = requests.get(f"{base_url}/api/user", cookies=cookies).json()
-print(user_resp)
+print(f"Found user: {response['id']}")
 ```
 
 See example usages in [examples/](examples/).
@@ -46,6 +45,8 @@ See example usages in [examples/](examples/).
 - [ ] Investigate feasibility of using a headless browser
 - [ ] Investigate feasibility of running in notebooks
 - [ ] Investigate feasibility of running in CI/CD
-- [ ] Improve handling of cookies: when they expire, the `requests.get` call will fail and just return HTML for
+- [ ] Full MyPy compatible type hints
+- [ ] Add more tests where applicable
+- [x] Improve handling of cookies: when they expire, the `requests.get` call will fail and just return HTML for
 the CLARIN discovery login. Incorporate common operations such as `get`, `post`, `put`, `delete` in the
 `ClarinCredentials` class, and when a json parse occurs, trigger a re-login request?
